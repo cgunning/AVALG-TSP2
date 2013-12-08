@@ -1,31 +1,48 @@
 import java.io.DataInputStream;
 import java.io.InputStream;
+import java.util.Random;
 
 public class TSP {
 
 	Graph graph;
 
 	public Node[] solve(double deadline) {
-		// System.out.println(calculateTotalDistance(graph.getNodes()));
 		Node[] tour = graph.getCities();
 		if (tour.length == 2) {
 			System.out.println(tour[0].getIndex());
 			System.out.println(tour[1].getIndex());
 			return null;
 		}
-
+		Opt opt = new Opt();
 		Node[] greedyTour = null;
 
+		greedyTour = graph.getCities();
+		// Arrays.sort(greedyTour, new Morton());
 		greedyTour = greedyTour();
-		tour = greedyTour;
-		// while (System.currentTimeMillis() < deadline)
-		// tour = Opt.twoOpt(graph, tour, deadline);
-		tour = Opt.threeOpt(graph, tour, deadline);
 
-		for (int i = 0; i < tour.length; i++) {
-			System.out.println(tour[i].getIndex());
+		tour = greedyTour;
+		Node[] bestTour = tour;
+		double bestDistance = Double.MAX_VALUE;
+		while (System.currentTimeMillis() < deadline) {
+			tour = opt.twoOpt(graph, tour, deadline);
+			double currentDistance = graph.calculateTotalDistance(tour);
+			if (currentDistance < bestDistance) {
+				bestDistance = currentDistance;
+				bestTour = tour.clone();
+			} else {
+				tour = bestTour.clone();
+			}
+			tour = shuffle(tour);
 		}
-		return tour;
+
+		for (int i = 0; i < bestTour.length; i++) {
+			System.out.println(bestTour[i].getIndex());
+		}
+		// System.out
+		// .println(graph.calculateTotalDistance(bestTour)
+		// + graph.getDistance(bestTour[0],
+		// bestTour[bestTour.length - 1]));
+		return bestTour;
 
 	}
 
@@ -76,6 +93,29 @@ public class TSP {
 		}
 		nodes[nodes.length - 1] = nodes[0];
 		this.graph = new Graph(nodes);
+	}
 
+	private Node[] shuffle(Node[] tour) {
+		int n = 3;
+		Random rnd = new Random();
+		for (int i = 0; i < n; i++) {
+			int i1 = rnd.nextInt(tour.length - 2) + 1;
+			int i2 = rnd.nextInt(tour.length - 2) + 1;
+
+			while (i1 == i2)
+				i2 = rnd.nextInt(tour.length - 2) + 1;
+
+			tour = reverse(tour, i1, i2);
+		}
+		return tour;
+	}
+
+	private static Node[] reverse(Node[] tour, int start, int end) {
+		Node[] newTour = tour.clone();
+
+		for (int i = start; i <= end; i++) {
+			newTour[i] = tour[end - (i - start)];
+		}
+		return newTour;
 	}
 }

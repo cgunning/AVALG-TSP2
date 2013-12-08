@@ -6,7 +6,7 @@ public class Graph {
 	public Graph(Node[] tour) {
 		size = tour.length;
 		distance = new double[size][size];
-		this.cities = tour;
+		this.cities = tour.clone();
 
 		for (int i = 1; i < size; i++) {
 			for (int j = 0; j < i; j++) {
@@ -33,7 +33,7 @@ public class Graph {
 	}
 
 	public Node[] getCities() {
-		return cities;
+		return cities.clone();
 	}
 
 	private double calculateDistance(Node n1, Node n2) {

@@ -8,7 +8,7 @@ public class Main {
 		// deadline += 20000;
 		TSP tsp = new TSP();
 		tsp.readGraph();
-		// double deadline = System.currentTimeMillis() + 1500;
+		// deadline = System.currentTimeMillis() + 15000;
 		Node[] tour = tsp.solve(deadline);
 		// }
 		// gui.drawTour(tour);
