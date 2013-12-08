@@ -1,14 +1,17 @@
 public class Main {
 	public static void main(String[] args) {
 		//
-		// GUI ex = new GUI();
-		// ex.setVisible(true);
+		// GUI gui = new GUI();
+		// gui.setSize(500, 500);
 		// while (true) {
-		double deadline = System.currentTimeMillis() + 1000;
+		double deadline = System.currentTimeMillis() + 1300;
 		// deadline += 20000;
-		TSP tsp = new TSP(null);
+		TSP tsp = new TSP();
 		tsp.readGraph();
+		// double deadline = System.currentTimeMillis() + 1500;
 		Node[] tour = tsp.solve(deadline);
 		// }
+		// gui.drawTour(tour);
+		// gui.setVisible(true);
 	}
 }
